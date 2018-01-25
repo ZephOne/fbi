@@ -9,7 +9,10 @@ from random import *
 import numpy as np
 ############################## Alphabet #############################
 alph = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
-alph_bis = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z", "NBT", ".", ",", "É", "#", "H/M", "H/T", "À", "È", "'"]
+# On crée l'alphabet bis pour construire le checkerboard avec au moins 10 caractère supplémentaires
+# au cas où le mot clé vaut dix caractères, tous unique au sein du mot clé
+alph_bis = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+            "NBT", ".", ",", "É", "#", "H/M", "H/T", "À", "È", "Ê", "?", "!", "-","'"]
 num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
 ########################### Définition des lignes ###################
 # Ligne A
@@ -202,8 +205,21 @@ def lineS(Kp):
 
 
 ################################ Fonction de transformation du mot-clé ###############################
-
+# Cette fonction prend un string et retourne un string n'ayant pas de lettre en double
 def transform(mot_cle):
+    L = []
+    res = []
+    # On transforme le mot-clé en une liste de caractère
+    for i in mot_cle:
+        L.append(i)
+    
+    # On enlève les doublons
+    while len(L) != 0:
+        if L[0] in res:
+            L.pop(0)
+        else:
+            res.append(L[0])
+            L.pop(0)
     return mot_cle
 
 ################################ Création du checkerboard ###############################
@@ -231,24 +247,31 @@ def checkerboard(mot_cle, Ks, chanson, date, parametre):
     Ks = lineS(Kp)
     
     cb = np.zeros((5, 11))
-    # On remplit la première ligne avec le mot clé
     mot_cle_bis = transform(mot_cle)
+    # On remplit la première ligne avec le mot clé
     # enlève les lettres de mot_clé de alph_bis
     for i in range(10):
         if i < len(mot_cle):
             cb[1][i + 1] = mot_cle_bis[i]
-    for i in range(5):
-        for j in range(11):
-            # On remplit les colones à partir de la 2ème ligne
-            if j == 3:
-                cb[2][3] = alph_bis[27-len(mot_cle_bis)]
-                cb[3][3] = alph_bis[28-len(mot_cle_bis)]
-                cb[4][3] = alph_bis[29-len(mot_cle_bis)]
-            elif j = 5:
-                cb[2][5] = alph_bis[30-len(mot_cle_bis)]
-                cb[3][5] = alph_bis[31-len(mot_cle_bis)]
-                cb[4][5] = alph_bis[32-len(mot_cle_bis)]
-            cb[i][j] = l
+            alph_bis.remove(mot_cle_bis[i])
+    # On remplit colonne par colonne
+    # On remplit les colonnes de 1 à 10, soit 10 colonnes
+    for j in range(10):
+        # On remplit les colones à partir de la 2ème ligne
+        if j == 3:
+            cb[2][3] = alph_bis[27-len(mot_cle_bis)]
+            cb[3][3] = alph_bis[28-len(mot_cle_bis)]
+            cb[4][3] = alph_bis[29-len(mot_cle_bis)]
+        elif j == 5:
+            cb[2][5] = alph_bis[30-len(mot_cle_bis)]
+            cb[3][5] = alph_bis[31-len(mot_cle_bis)]
+            cb[4][5] = alph_bis[32-len(mot_cle_bis)]
+        else:
+            # On remplit les ligne à partir de la ligne 2, soit 3 lignes
+            for i in range(3):
+                # On parcours l'alphabet sur une boucle de 3 et on ajoute les lettres au fur et à mesure.
+                cb[i][j] = alph_bis[a]
+                
             
             
             
